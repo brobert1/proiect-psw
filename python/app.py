@@ -13,7 +13,7 @@ st.set_page_config(
 
 st.title("⚡ Daewoo Steel Co. — Eficiență energetică & optimizare de cost")
 st.caption(
-    "Proiect Pachete Software | CSIE an III | echipă: <NUME_1>, <NUME_2> — grupa <GRUPA>"
+    "Proiect Pachete Software | CSIE | echipă: Ghetiu Tudor, Bercaru Robert — grupa 1085"
 )
 
 df = load_data()

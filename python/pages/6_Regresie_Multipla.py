@@ -34,7 +34,57 @@ X = sm.add_constant(X)
 model = sm.OLS(y, X).fit()
 
 st.subheader("Sumar OLS")
-st.text(model.summary().as_text())
+
+# ── Row 1: goodness-of-fit ────────────────────────────────────────────────
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("R²",                 f"{model.rsquared:.4f}")
+c2.metric("R²-ajustat",         f"{model.rsquared_adj:.4f}")
+c3.metric("F-statistic",        f"{model.fvalue:,.2f}",
+          help=f"Prob (F-stat): {model.f_pvalue:.2e}")
+c4.metric("Prob (F-statistic)", f"{model.f_pvalue:.2e}")
+
+# ── Row 2: information criteria & sample info ─────────────────────────────
+c5, c6, c7, c8 = st.columns(4)
+c5.metric("AIC",                f"{model.aic:,.2f}")
+c6.metric("BIC",                f"{model.bic:,.2f}")
+c7.metric("Log-Likelihood",     f"{model.llf:,.2f}")
+c8.metric("Nr. observații",     f"{int(model.nobs):,}")
+
+# ── Row 3: degrees of freedom & residual variance ─────────────────────────
+c9, c10, c11, c12 = st.columns(4)
+c9.metric("Grade lib. model",   f"{int(model.df_model)}")
+c10.metric("Grade lib. rezid.", f"{int(model.df_resid)}")
+c11.metric("MSE reziduuri",     f"{model.mse_resid:.4f}")
+c12.metric("√MSE (Std. Err. of regr.)", f"{model.mse_resid ** 0.5:.4f}")
+
+# ── Compact model-stats table ─────────────────────────────────────────────
+stats_df = pd.DataFrame(
+    {
+        "Indicator": [
+            "R²", "R²-ajustat", "F-statistic", "Prob (F-stat)",
+            "Log-Likelihood", "AIC", "BIC",
+            "Nr. observații", "Grade lib. model", "Grade lib. reziduuri",
+            "MSE model", "MSE reziduuri",
+        ],
+        "Valoare": [
+            f"{model.rsquared:.6f}",
+            f"{model.rsquared_adj:.6f}",
+            f"{model.fvalue:.4f}",
+            f"{model.f_pvalue:.4e}",
+            f"{model.llf:.4f}",
+            f"{model.aic:.4f}",
+            f"{model.bic:.4f}",
+            f"{int(model.nobs)}",
+            f"{int(model.df_model)}",
+            f"{int(model.df_resid)}",
+            f"{model.mse_model:.4f}",
+            f"{model.mse_resid:.4f}",
+        ],
+    }
+).set_index("Indicator")
+
+with st.expander("📋 Tabel complet statistici model", expanded=False):
+    st.dataframe(stats_df, use_container_width=True)
 
 st.subheader("Coeficienți & semnificație")
 coef_df = pd.DataFrame({
