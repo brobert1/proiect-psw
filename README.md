@@ -1,7 +1,5 @@
 # Proiect Pachete Software — Daewoo Steel Energy Consumption
 
-Facultatea CSIE, anul III. Echipă: `<NUME_1>`, `<NUME_2>` — grupa `<GRUPA>`.
-
 ## Narativă
 
 Analiza consumului energetic al fabricii Daewoo Steel Co. (set date Kaggle,
