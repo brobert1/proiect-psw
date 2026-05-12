@@ -12,8 +12,8 @@
     %if %sysfunc(exist(steel.logit_in)) %then %do;
         proc hpforest data=steel.logit_in maxtrees=50 seed=42;
             target high_load / level=binary;
-            input Lagging_Current_Reactive_Power_kVarh
-                  Leading_Current_Reactive_Power_kVarh
+            input 'Lagging_Current_Reactive.Power_k'n
+                  Leading_Current_Reactive_Power_k
                   Lagging_Current_Power_Factor
                   Leading_Current_Power_Factor
                   NSM / level=interval;
@@ -33,8 +33,8 @@
 proc hplogistic data=steel.logit_in;
     class schimb WeekStatus;
     model high_load(event="1") =
-        Lagging_Current_Reactive_Power_kVarh
-        Leading_Current_Reactive_Power_kVarh
+        'Lagging_Current_Reactive.Power_k'n
+        Leading_Current_Reactive_Power_k
         Lagging_Current_Power_Factor
         Leading_Current_Power_Factor
         NSM schimb WeekStatus;

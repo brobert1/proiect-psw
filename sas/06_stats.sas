@@ -6,8 +6,8 @@
 
 /* 1. Corelatii Pearson intre variabilele numerice. */
 proc corr data=steel.clean pearson;
-    var Usage_kWh Lagging_Current_Reactive_Power_kVarh
-        Leading_Current_Reactive_Power_kVarh
+    var Usage_kWh 'Lagging_Current_Reactive.Power_k'n
+        Leading_Current_Reactive_Power_k
         Lagging_Current_Power_Factor Leading_Current_Power_Factor
         CO2_tCO2_ NSM;
     title "Matricea corelatiilor Pearson";
@@ -15,8 +15,8 @@ run;
 
 /* 2. Regresie multipla : Usage_kWh ~ driverii tehnici. */
 proc reg data=steel.clean;
-    model Usage_kWh = Lagging_Current_Reactive_Power_kVarh
-                      Leading_Current_Reactive_Power_kVarh
+    model Usage_kWh = 'Lagging_Current_Reactive.Power_k'n
+                      Leading_Current_Reactive_Power_k
                       Lagging_Current_Power_Factor
                       Leading_Current_Power_Factor
                       NSM
@@ -35,8 +35,8 @@ run;
 proc logistic data=steel.logit_in descending;
     class schimb WeekStatus / param=ref;
     model high_load(event="1") =
-        Lagging_Current_Reactive_Power_kVarh
-        Leading_Current_Reactive_Power_kVarh
+        'Lagging_Current_Reactive.Power_k'n
+        Leading_Current_Reactive_Power_k
         Lagging_Current_Power_Factor
         Leading_Current_Power_Factor
         NSM schimb WeekStatus
