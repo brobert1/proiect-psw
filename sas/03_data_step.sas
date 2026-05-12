@@ -10,12 +10,10 @@
 data steel.clean;
     set steel.raw;
 
-    /* Parsare data de tip "DD/MM/YYYY HH:MM" in variabila datetime. */
-    dt_txt = date;
-    stamp  = input(dt_txt, anydtdte40.);
-    time_num = input(scan(dt_txt, 2, " "), time5.);
-    ora    = hour(time_num);
-    zi_sapt = weekday(stamp);     /* 1=Duminica ... 7=Sambata */
+    stamp    = date;
+    ora      = hour(date);
+    zi_sapt  = weekday(datepart(date));    /* 1=Duminica ... 7=Sambata */
+    luna     = month(datepart(date));
 
     /* Eticheta pentru schimb, folosind IF/THEN/ELSE. */
     length schimb $12;
@@ -25,7 +23,6 @@ data steel.clean;
     else schimb = "Noapte";
 
     /* Flag zi de vara (IUN-AUG) pentru analize sezoniere. */
-    luna = month(stamp);
     is_vara = (luna in (6, 7, 8));
 
     /* Cost energie (EUR) pentru intervalul de 15 min. */
@@ -33,11 +30,10 @@ data steel.clean;
 
     /* Estimare factor de putere aparent cosφ. */
     if Usage_kWh > 0 then
-        cos_phi = Usage_kWh / sqrt(Usage_kWh**2 + Lagging_Current_Reactive_Power_kVarh**2);
+        cos_phi = Usage_kWh / sqrt(Usage_kWh**2 + 'Lagging_Current_Reactive.Power_k'n**2);
     else cos_phi = 1;
     cos_phi = round(cos_phi, 0.001);
 
-    drop dt_txt time_num;
     format stamp datetime20.;
 run;
 
@@ -45,8 +41,8 @@ run;
 data steel.array_demo;
     set steel.clean;
 
-    array num_vars {*} Usage_kWh Lagging_Current_Reactive_Power_kVarh
-                       Leading_Current_Reactive_Power_kVarh;
+    array num_vars {*} Usage_kWh 'Lagging_Current_Reactive.Power_k'n
+                       Leading_Current_Reactive_Power_k;
     array neg_flag {3} neg1 neg2 neg3;
 
     do i = 1 to dim(num_vars);

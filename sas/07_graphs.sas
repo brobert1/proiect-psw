@@ -26,7 +26,7 @@ run;
 
 /* 4. Scatterplot Usage vs reactiv lagging, culoare pe Load_Type. */
 proc sgplot data=steel.clean;
-    scatter x=Lagging_Current_Reactive_Power_kVarh y=Usage_kWh
+    scatter x='Lagging_Current_Reactive.Power_k'n y=Usage_kWh
         / group=Load_Type markerattrs=(symbol=circlefilled size=4);
     xaxis label="Putere reactiva lagging (kVarh)";
     yaxis label="Consum activ (kWh)";
